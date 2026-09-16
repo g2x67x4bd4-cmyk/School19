@@ -127,3 +127,41 @@ collections:
               - { label: "Размер", name: "meta", widget: "string" }
               - { label: "Иконка", name: "icon", widget: "string", default: "📄" }
               - { label: "Ссылка", name: "url", widget: "string", default: "#" }
+
+  - name: "site"
+    label: "⚙️ Настройки сайта"
+    files:
+      - name: "site"
+        label: "Тексты сайта"
+        file: "data/site.json"
+        fields:
+          - { label: "Объявление сверху", name: "notice", widget: "string" }
+          - { label: "Адрес в hero", name: "hero_badge", widget: "string" }
+          - { label: "Текст под заголовком", name: "hero_sub", widget: "text" }
+          - label: "Счётчики"
+            name: "stats"
+            widget: "list"
+            label_singular: "Счётчик"
+            fields:
+              - { label: "Число", name: "number", widget: "number", value_type: "int" }
+              - { label: "Подпись", name: "label", widget: "string" }
+          - label: "Карточки о школе"
+            name: "about_cards"
+            widget: "list"
+            label_singular: "Карточка"
+            fields:
+              - { label: "Иконка", name: "icon", widget: "string" }
+              - { label: "Заголовок", name: "title", widget: "string" }
+              - { label: "Текст", name: "text", widget: "text" }
+          - label: "Информация о школе"
+            name: "about_info"
+            widget: "list"
+            label_singular: "Строка"
+            fields:
+              - { label: "Название", name: "label", widget: "string" }
+              - { label: "Значение", name: "value", widget: "string" }
+          - { label: "Адрес", name: "contact_address", widget: "string" }
+          - { label: "Телефон", name: "contact_phone", widget: "string" }
+          - { label: "E-mail", name: "contact_email", widget: "string" }
+          - { label: "Режим работы", name: "contact_hours", widget: "string" }
+          - { label: "Текст в подвале", name: "footer_desc", widget: "text" }
