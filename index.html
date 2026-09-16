@@ -1,29 +1,265 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Админка — Школа №19</title>
-  <link rel="stylesheet" href="https://unpkg.com/decap-cms@^3.0.0/dist/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#8B1A1A">
+  <title>Школа №19 — г. Жанаозен</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Netlify Identity Widget — форма входа -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-  <!-- Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+<div class="notice-bar" id="noticeBar">
+  <div class="container notice-inner">
+    <span class="notice-icon">📢</span>
+    <p class="notice-text"><strong>Объявление:</strong> ОБЪЯВЛЕНИЕ:_____</p>
+    <button class="notice-close" id="noticeClose">×</button>
+  </div>
+</div>
 
-  <!-- Перенаправление после входа -->
-  <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', user => {
-        if (!user) {
-          window.netlifyIdentity.on('login', () => {
-            document.location.href = '/admin/';
-          });
-        }
-      });
-    }
-  </script>
+<header class="header" id="header">
+  <div class="container header-inner">
+    <a href="#home" class="logo">
+      <span class="logo-mark">19</span>
+      <span class="logo-text">
+        <span class="logo-title">Школа №19</span>
+        <span class="logo-sub">г. Жанаозен</span>
+      </span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="#home" class="nav-link">Главная</a>
+      <a href="#about" class="nav-link">О школе</a>
+      <a href="#news" class="nav-link">Новости</a>
+      <a href="#schedule" class="nav-link">Расписание</a>
+      <a href="#teachers" class="nav-link">Учителя</a>
+      <a href="#achievements" class="nav-link">Достижения</a>
+      <a href="#events" class="nav-link">Мероприятия</a>
+      <a href="#gallery" class="nav-link">Галерея</a>
+      <a href="#documents" class="nav-link">Документы</a>
+      <a href="#contacts" class="nav-link">Контакты</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="searchToggle">🔍</button>
+      <button class="icon-btn" id="themeToggle"><span id="themeIcon">🌙</span></button>
+      <button class="icon-btn burger" id="burger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="search-panel" id="searchPanel">
+    <div class="container">
+      <div class="search-box">
+        <input type="search" id="searchInput" placeholder="Поиск по сайту…">
+        <button class="search-close" id="searchClose">×</button>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+</header>
+
+<div class="nav-overlay" id="navOverlay"></div>
+
+<main>
+
+<section id="home" class="hero">
+  <div class="container hero-content">
+    <span class="hero-badge">📍 АДРЕС:_____</span>
+    <h1 class="hero-title">Общеобразовательная школа <span class="accent">№19</span></h1>
+    <p class="hero-sub">ТЕКСТ О ШКОЛЕ:_____</p>
+    <div class="hero-actions">
+      <a href="#about" class="btn btn-primary">Узнать о школе</a>
+      <a href="#contacts" class="btn btn-outline">Связаться</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card"><strong data-count="0">0</strong><span>учеников</span></div>
+      <div class="stat-card"><strong data-count="0">0</strong><span>педагогов</span></div>
+      <div class="stat-card"><strong data-count="0">0</strong><span>кабинетов</span></div>
+      <div class="stat-card"><strong data-count="0">0</strong><span>лет истории</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">О школе</span>
+      <h2 class="section-title">Наша школа сегодня</h2>
+      <p class="section-desc">ОПИСАНИЕ ШКОЛЫ:_____</p>
+    </div>
+    <div class="about-grid">
+      <article class="card about-card reveal"><div class="card-icon">🎯</div><h3>Миссия</h3><p>ТЕКСТ:_____</p></article>
+      <article class="card about-card reveal"><div class="card-icon">📚</div><h3>Обучение</h3><p>ТЕКСТ:_____</p></article>
+      <article class="card about-card reveal"><div class="card-icon">🏆</div><h3>Достижения</h3><p>ТЕКСТ:_____</p></article>
+      <article class="card about-card reveal"><div class="card-icon">🤝</div><h3>Сообщество</h3><p>ТЕКСТ:_____</p></article>
+    </div>
+    <div class="about-info reveal">
+      <div class="info-row"><span class="info-label">Год основания</span><span class="info-value">ГОД:_____</span></div>
+      <div class="info-row"><span class="info-label">Языки обучения</span><span class="info-value">ЯЗЫКИ:_____</span></div>
+      <div class="info-row"><span class="info-label">Сменность</span><span class="info-value">СМЕНЫ:_____</span></div>
+      <div class="info-row"><span class="info-label">Форма собственности</span><span class="info-value">ФОРМА:_____</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="news" class="section section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Новости</span>
+      <h2 class="section-title">Новости и объявления</h2>
+    </div>
+    <div class="filters reveal" id="newsFilters">
+      <button class="filter-btn active" data-filter="all">Все</button>
+      <button class="filter-btn" data-filter="study">Учёба</button>
+      <button class="filter-btn" data-filter="sport">Спорт</button>
+      <button class="filter-btn" data-filter="event">Мероприятия</button>
+      <button class="filter-btn" data-filter="notice">Объявления</button>
+    </div>
+    <div class="news-grid" id="newsGrid"></div>
+  </div>
+</section>
+
+<section id="schedule" class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Расписание</span>
+      <h2 class="section-title">Расписание уроков</h2>
+    </div>
+    <div class="schedule-controls reveal">
+      <label class="select-wrap"><span>Класс:</span><select id="classSelect"></select></label>
+      <div class="day-tabs" id="dayTabs">
+        <button class="day-tab active" data-day="Пн">Пн</button>
+        <button class="day-tab" data-day="Вт">Вт</button>
+        <button class="day-tab" data-day="Ср">Ср</button>
+        <button class="day-tab" data-day="Чт">Чт</button>
+        <button class="day-tab" data-day="Пт">Пт</button>
+      </div>
+    </div>
+    <div class="schedule-table-wrap reveal">
+      <table class="schedule-table">
+        <thead><tr><th>№</th><th>Время</th><th>Предмет</th></tr></thead>
+        <tbody id="scheduleBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="teachers" class="section section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Педагоги</span>
+      <h2 class="section-title">Учителя и администрация</h2>
+    </div>
+    <div class="teachers-grid" id="teachersGrid"></div>
+  </div>
+</section>
+
+<section id="achievements" class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Достижения</span>
+      <h2 class="section-title">Достижения учеников</h2>
+    </div>
+    <div class="achieve-grid">
+      <article class="card achieve-card reveal"><div class="achieve-medal gold">🥇</div><h3>НАЗВАНИЕ:_____</h3><p class="achieve-meta">ГОД · ГОРОД</p><p>ОПИСАНИЕ:_____</p></article>
+      <article class="card achieve-card reveal"><div class="achieve-medal silver">🥈</div><h3>НАЗВАНИЕ:_____</h3><p class="achieve-meta">ГОД · ГОРОД</p><p>ОПИСАНИЕ:_____</p></article>
+      <article class="card achieve-card reveal"><div class="achieve-medal bronze">🥉</div><h3>НАЗВАНИЕ:_____</h3><p class="achieve-meta">ГОД · ГОРОД</p><p>ОПИСАНИЕ:_____</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="events" class="section section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Мероприятия</span>
+      <h2 class="section-title">Календарь мероприятий</h2>
+    </div>
+    <div class="events-layout">
+      <div class="calendar card reveal">
+        <div class="calendar-head">
+          <button class="cal-nav" id="prevMonth">‹</button>
+          <h3 id="calendarTitle"></h3>
+          <button class="cal-nav" id="nextMonth">›</button>
+        </div>
+        <div class="calendar-weekdays"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span></div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+      <div class="events-list-wrap reveal">
+        <h3 class="events-list-title" id="eventsListTitle"></h3>
+        <div class="events-list" id="eventsList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Галерея</span>
+      <h2 class="section-title">Галерея фотографий</h2>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</section>
+
+<section id="documents" class="section section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Документы</span>
+      <h2 class="section-title">Нормативные документы</h2>
+    </div>
+    <div class="docs-grid" id="docsGrid"></div>
+  </div>
+</section>
+
+<section id="contacts" class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Контакты</span>
+      <h2 class="section-title">Свяжитесь с нами</h2>
+    </div>
+    <div class="contacts-layout">
+      <div class="contact-info reveal">
+        <div class="card contact-card"><div class="contact-icon">📍</div><div><h4>Адрес</h4><p>АДРЕС:_____</p></div></div>
+        <div class="card contact-card"><div class="contact-icon">📞</div><div><h4>Телефон</h4><p><a href="tel:">ТЕЛЕФОН:_____</a></p></div></div>
+        <div class="card contact-card"><div class="contact-icon">✉️</div><div><h4>E-mail</h4><p><a href="mailto:">EMAIL:_____</a></p></div></div>
+        <div class="card contact-card"><div class="contact-icon">🕐</div><div><h4>Режим работы</h4><p>РЕЖИМ:_____</p></div></div>
+      </div>
+      <form class="card contact-form reveal" id="contactForm" novalidate>
+        <h3>Форма обратной связи</h3>
+        <div class="field"><label>Имя *</label><input type="text" id="cfName" required><small class="error"></small></div>
+        <div class="field"><label>E-mail *</label><input type="email" id="cfEmail" required><small class="error"></small></div>
+        <div class="field"><label>Тема</label><input type="text" id="cfSubject"></div>
+        <div class="field"><label>Сообщение *</label><textarea id="cfMessage" rows="5" required></textarea><small class="error"></small></div>
+        <button type="submit" class="btn btn-primary btn-block">Отправить</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-col">
+      <div class="logo logo-footer"><span class="logo-mark">19</span><span class="logo-text"><span class="logo-title">Школа №19</span><span class="logo-sub">г. Жанаозен</span></span></div>
+      <p class="footer-desc">ОПИСАНИЕ:_____</p>
+    </div>
+    <div class="footer-col"><h4>Разделы</h4><ul class="footer-links"><li><a href="#about">О школе</a></li><li><a href="#news">Новости</a></li><li><a href="#schedule">Расписание</a></li><li><a href="#teachers">Учителя</a></li><li><a href="#gallery">Галерея</a></li></ul></div>
+    <div class="footer-col"><h4>Полезное</h4><ul class="footer-links"><li><a href="#documents">Документы</a></li><li><a href="#events">Мероприятия</a></li><li><a href="#achievements">Достижения</a></li><li><a href="#contacts">Контакты</a></li></ul></div>
+    <div class="footer-col"><h4>Контакты</h4><ul class="footer-contacts"><li>📍 АДРЕС:_____</li><li>📞 <a href="tel:">ТЕЛЕФОН:_____</a></li><li>✉️ <a href="mailto:">EMAIL:_____</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><div class="container"><p>© <span id="year"></span> Школа №19, г. Жанаозен</p></div></div>
+</footer>
+
+<button class="to-top" id="toTop">↑</button>
+
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose">×</button>
+  <button class="lb-nav lb-prev" id="lbPrev">‹</button>
+  <figure class="lb-figure"><div class="lb-image" id="lbImage"></div><figcaption id="lbCaption"></figcaption></figure>
+  <button class="lb-nav lb-next" id="lbNext">›</button>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="script.js"></script>
 </body>
 </html>
