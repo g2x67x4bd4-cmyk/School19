@@ -3,16 +3,15 @@
 const $  = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
-/* Загрузка JSON */
 async function loadJSON(path) {
   try {
     const r = await fetch(path, { cache: 'no-cache' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
-    return d.items || d.classes || [];
+    return d.items || d.classes || d || {};
   } catch (e) {
     console.warn('Ошибка загрузки', path, e);
-    return [];
+    return null;
   }
 }
 
@@ -43,7 +42,6 @@ function applyTheme(t) {
 }
 const saved = localStorage.getItem('theme');
 if (saved) applyTheme(saved);
-else if (matchMedia('(prefers-color-scheme: dark)').matches) applyTheme('dark');
 themeToggle.addEventListener('click', () => {
   applyTheme(htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 });
@@ -84,29 +82,14 @@ const revealObs = new IntersectionObserver(es => es.forEach(e => {
 }), { threshold: .12, rootMargin: '0px 0px -40px 0px' });
 function observeReveals() { $$('.reveal:not(.visible)').forEach(el => revealObs.observe(el)); }
 
-/* ---------- Счётчики ---------- */
-$$('[data-count]').forEach(el => {
-  const obs = new IntersectionObserver(es => es.forEach(e => {
-    if (!e.isIntersecting) return;
-    const target = +el.dataset.count, start = performance.now();
-    (function tick(now) {
-      const p = Math.min((now - start) / 1600, 1);
-      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))).toLocaleString('ru-RU');
-      if (p < 1) requestAnimationFrame(tick);
-    })(start);
-    obs.unobserve(el);
-  }), { threshold: .5 });
-  obs.observe(el);
-});
-
 /* ---------- Поиск ---------- */
 const searchToggle = $('#searchToggle'), searchPanel = $('#searchPanel'), searchInput = $('#searchInput'), searchResults = $('#searchResults'), searchClose = $('#searchClose');
 function openSearch() { searchPanel.classList.add('open'); setTimeout(() => searchInput.focus(), 200); }
 function closeSearch() { searchPanel.classList.remove('open'); searchInput.value = ''; searchResults.innerHTML = ''; }
 searchToggle.addEventListener('click', () => searchPanel.classList.contains('open') ? closeSearch() : openSearch());
 searchClose.addEventListener('click', closeSearch);
-function esc(s) { return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
-function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function escRe(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 searchInput.addEventListener('input', e => {
   const q = e.target.value.trim();
   if (q.length < 2) { searchResults.innerHTML = q ? '<p class="search-empty">Введите минимум 2 символа</p>' : ''; return; }
@@ -136,6 +119,60 @@ searchInput.addEventListener('input', e => {
 /* ---------- Рендеры ---------- */
 const CATEGORY_LABELS = { study: 'Учёба', sport: 'Спорт', event: 'Мероприятие', notice: 'Объявление' };
 const LESSON_TIMES = ['08:00', '08:55', '09:50', '10:45', '11:40', '12:35'];
+
+function renderSite(site) {
+  if (!site) return;
+
+  $('#siteNotice').textContent = site.notice || '';
+  $('#siteBadge').textContent = site.hero_badge || '';
+  $('#siteHeroSub').textContent = site.hero_sub || '';
+
+  // Статистика
+  $('#siteStats').innerHTML = (site.stats || []).map(s => `
+    <div class="stat-card"><strong data-count="${s.number}">0</strong><span>${s.label}</span></div>
+  `).join('');
+  // Анимируем счётчики
+  $$('[data-count]').forEach(el => {
+    const target = +el.dataset.count;
+    if (!target) return;
+    const start = performance.now();
+    (function tick(now) {
+      const p = Math.min((now - start) / 1600, 1);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))).toLocaleString('ru-RU');
+      if (p < 1) requestAnimationFrame(tick);
+    })(start);
+  });
+
+  // О школе — карточки
+  $('#siteAboutCards').innerHTML = (site.about_cards || []).map(c => `
+    <article class="card about-card reveal">
+      <div class="card-icon">${c.icon || '📌'}</div>
+      <h3>${c.title}</h3>
+      <p>${c.text}</p>
+    </article>
+  `).join('');
+
+  // О школе — инфо
+  $('#siteAboutInfo').innerHTML = (site.about_info || []).map(i => `
+    <div class="info-row"><span class="info-label">${i.label}</span><span class="info-value">${i.value}</span></div>
+  `).join('');
+
+  // Контакты
+  $('#siteAddress').textContent = site.contact_address || '';
+  $('#sitePhone').textContent = site.contact_phone || '';
+  $('#sitePhoneLink').href = 'tel:' + (site.contact_phone || '').replace(/[^\d+]/g, '');
+  $('#siteEmail').textContent = site.contact_email || '';
+  $('#siteEmailLink').href = 'mailto:' + (site.contact_email || '');
+  $('#siteHours').innerHTML = (site.contact_hours || '').replace(/, /g, '<br>');
+
+  // Подвал
+  $('#siteFooterDesc').textContent = site.footer_desc || '';
+  $('#siteFooterAddress').textContent = site.contact_address || '';
+  $('#siteFooterPhone').textContent = site.contact_phone || '';
+  $('#siteFooterPhoneLink').href = 'tel:' + (site.contact_phone || '').replace(/[^\d+]/g, '');
+  $('#siteFooterEmail').textContent = site.contact_email || '';
+  $('#siteFooterEmailLink').href = 'mailto:' + (site.contact_email || '');
+}
 
 function renderNews(list) {
   const grid = $('#newsGrid');
@@ -322,20 +359,22 @@ contactForm.addEventListener('submit', e => {
 
 /* ---------- Запуск ---------- */
 async function init() {
-  const [news, teachers, classes, events, gallery, documents] = await Promise.all([
+  const [news, teachers, classes, events, gallery, documents, site] = await Promise.all([
     loadJSON('data/news.json'),
     loadJSON('data/teachers.json'),
     loadJSON('data/schedule.json'),
     loadJSON('data/events.json'),
     loadJSON('data/gallery.json'),
-    loadJSON('data/documents.json')
+    loadJSON('data/documents.json'),
+    loadJSON('data/site.json')
   ]);
-  renderNews(news);
-  renderTeachers(teachers);
-  initSchedule(classes);
-  renderGallery(gallery);
-  renderDocs(documents);
-  EVENTS = events;
+  renderSite(site || {});
+  renderNews(news || []);
+  renderTeachers(teachers || []);
+  initSchedule(classes || []);
+  renderGallery(gallery || []);
+  renderDocs(documents || []);
+  EVENTS = events || [];
   renderCalendar();
   renderEvents();
   observeReveals();
