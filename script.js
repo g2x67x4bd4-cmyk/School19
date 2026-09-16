@@ -3,49 +3,20 @@
 const $  = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
-/* ============================================================
-   ДАННЫЕ — ЗАПОЛНИТЕ САМИ
-   ============================================================ */
+/* Загрузка JSON */
+async function loadJSON(path) {
+  try {
+    const r = await fetch(path, { cache: 'no-cache' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    return d.items || d.classes || [];
+  } catch (e) {
+    console.warn('Ошибка загрузки', path, e);
+    return [];
+  }
+}
 
-// НОВОСТИ:_____
-const NEWS = [
-  // { date: 'ДАТА', title: 'ЗАГОЛОВОК', text: 'ТЕКСТ', category: 'notice', image: 'ph-1' },
-];
-
-// УЧИТЕЛЯ:_____
-const TEACHERS = [
-  // { name: 'ФИО', role: 'ДОЛЖНОСТЬ', meta: 'КАТЕГОРИЯ · СТАЖ' },
-];
-
-// РАСПИСАНИЕ (без Сб):_____
-const SCHEDULE = {
-  // '5А': { 'Пн': ['ПРЕДМЕТ'], 'Вт': [...], 'Ср': [...], 'Чт': [...], 'Пт': [...] },
-};
-
-// ВРЕМЯ УРОКОВ:_____
-const LESSON_TIMES = ['08:00', '08:55', '09:50', '10:45', '11:40', '12:35'];
-
-// МЕРОПРИЯТИЯ:_____
-const EVENTS = [
-  // { date: 'ГГГГ-ММ-ДД', time: 'ЧЧ:ММ', title: 'НАЗВАНИЕ', desc: 'ОПИСАНИЕ', place: 'МЕСТО' },
-];
-
-// ГАЛЕРЕЯ:_____
-const GALLERY = [
-  // { label: 'ПОДПИСЬ', cls: 'ph-1' },
-];
-
-// ДОКУМЕНТЫ:_____
-const DOCUMENTS = [
-  // { title: 'НАЗВАНИЕ', meta: 'PDF · РАЗМЕР', icon: '📄', url: '#' },
-];
-
-/* ============================================================
-   КОД — НЕ ТРОГАЙТЕ
-   ============================================================ */
-
-const CATEGORY_LABELS = { study: 'Учёба', sport: 'Спорт', event: 'Мероприятие', notice: 'Объявление' };
-
+/* ---------- Тосты ---------- */
 const toastWrap = $('#toastWrap');
 function showToast(msg, type = 'info', dur = 4500) {
   const t = document.createElement('div');
@@ -55,6 +26,7 @@ function showToast(msg, type = 'info', dur = 4500) {
   setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, dur);
 }
 
+/* ---------- Объявление ---------- */
 const noticeBar = $('#noticeBar'), noticeClose = $('#noticeClose');
 if (sessionStorage.getItem('notice-closed') === '1') noticeBar.classList.add('hidden');
 noticeClose.addEventListener('click', () => {
@@ -62,6 +34,7 @@ noticeClose.addEventListener('click', () => {
   sessionStorage.setItem('notice-closed', '1');
 });
 
+/* ---------- Тема ---------- */
 const htmlEl = document.documentElement, themeToggle = $('#themeToggle'), themeIcon = $('#themeIcon');
 function applyTheme(t) {
   htmlEl.setAttribute('data-theme', t);
@@ -75,6 +48,7 @@ themeToggle.addEventListener('click', () => {
   applyTheme(htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 });
 
+/* ---------- Меню ---------- */
 const burger = $('#burger'), nav = $('#nav'), overlay = $('#navOverlay');
 function closeMenu() {
   nav.classList.remove('open'); burger.classList.remove('active');
@@ -89,6 +63,7 @@ burger.addEventListener('click', () => {
 overlay.addEventListener('click', closeMenu);
 $$('.nav-link').forEach(l => l.addEventListener('click', closeMenu));
 
+/* ---------- Скролл ---------- */
 const header = $('#header'), toTop = $('#toTop');
 addEventListener('scroll', () => {
   header.classList.toggle('scrolled', scrollY > 10);
@@ -96,17 +71,20 @@ addEventListener('scroll', () => {
 }, { passive: true });
 toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
 
+/* ---------- Активная ссылка ---------- */
 const navLinks = $$('.nav-link'), sections = $$('main section[id]');
 const obs = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
 }), { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach(s => obs.observe(s));
 
+/* ---------- Появление ---------- */
 const revealObs = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
 }), { threshold: .12, rootMargin: '0px 0px -40px 0px' });
 function observeReveals() { $$('.reveal:not(.visible)').forEach(el => revealObs.observe(el)); }
 
+/* ---------- Счётчики ---------- */
 $$('[data-count]').forEach(el => {
   const obs = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
@@ -121,6 +99,7 @@ $$('[data-count]').forEach(el => {
   obs.observe(el);
 });
 
+/* ---------- Поиск ---------- */
 const searchToggle = $('#searchToggle'), searchPanel = $('#searchPanel'), searchInput = $('#searchInput'), searchResults = $('#searchResults'), searchClose = $('#searchClose');
 function openSearch() { searchPanel.classList.add('open'); setTimeout(() => searchInput.focus(), 200); }
 function closeSearch() { searchPanel.classList.remove('open'); searchInput.value = ''; searchResults.innerHTML = ''; }
@@ -154,69 +133,100 @@ searchInput.addEventListener('input', e => {
   $$('.search-result').forEach(el => el.addEventListener('click', closeSearch));
 });
 
-const newsGrid = $('#newsGrid');
-newsGrid.innerHTML = NEWS.map(it => `
-  <article class="card news-card reveal" data-category="${it.category}">
-    <div class="news-thumb ${it.image || 'ph-1'}"><span class="news-cat">${CATEGORY_LABELS[it.category] || 'Новость'}</span></div>
-    <div class="news-body"><time class="news-date">${it.date}</time><h3>${it.title}</h3><p>${it.text}</p></div>
-  </article>
-`).join('');
+/* ---------- Рендеры ---------- */
+const CATEGORY_LABELS = { study: 'Учёба', sport: 'Спорт', event: 'Мероприятие', notice: 'Объявление' };
+const LESSON_TIMES = ['08:00', '08:55', '09:50', '10:45', '11:40', '12:35'];
 
-$$('.filter-btn').forEach(btn => btn.addEventListener('click', () => {
-  $$('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const cat = btn.dataset.filter;
-  $$('.news-card').forEach(c => {
-    const ok = cat === 'all' || c.dataset.category === cat;
-    c.style.display = ok ? '' : 'none';
+function renderNews(list) {
+  const grid = $('#newsGrid');
+  grid.innerHTML = list.map(it => `
+    <article class="card news-card reveal" data-category="${it.category}">
+      <div class="news-thumb ${it.image || 'ph-1'}"><span class="news-cat">${CATEGORY_LABELS[it.category] || 'Новость'}</span></div>
+      <div class="news-body"><time class="news-date">${it.date}</time><h3>${it.title}</h3><p>${it.text}</p></div>
+    </article>
+  `).join('');
+  $$('.filter-btn').forEach(btn => btn.onclick = () => {
+    $$('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.filter;
+    $$('.news-card').forEach(c => c.style.display = (cat === 'all' || c.dataset.category === cat) ? '' : 'none');
   });
-}));
+}
 
 function getInitials(n) { return n.replace(/\./g, '').trim().split(/\s+/).slice(0, 2).map(p => p[0] || '').join('').toUpperCase(); }
-$('#teachersGrid').innerHTML = TEACHERS.map(t => `
-  <article class="card teacher-card reveal">
-    <div class="teacher-avatar">${getInitials(t.name)}</div>
-    <h3>${t.name}</h3><span class="teacher-role">${t.role}</span><p class="teacher-meta">${t.meta}</p>
-  </article>
-`).join('');
+function renderTeachers(list) {
+  $('#teachersGrid').innerHTML = list.map(t => `
+    <article class="card teacher-card reveal">
+      <div class="teacher-avatar">${getInitials(t.name)}</div>
+      <h3>${t.name}</h3><span class="teacher-role">${t.role}</span><p class="teacher-meta">${t.meta}</p>
+    </article>
+  `).join('');
+}
 
-const classSelect = $('#classSelect'), dayTabs = $('#dayTabs'), scheduleBody = $('#scheduleBody');
-let currentClass = '', currentDay = 'Пн';
-Object.keys(SCHEDULE).forEach(c => {
-  const o = document.createElement('option');
-  o.value = c; o.textContent = c;
-  classSelect.appendChild(o);
-});
-if (classSelect.options.length) { currentClass = classSelect.options[0].value; classSelect.value = currentClass; }
-
+let SCHEDULE = {}, currentClass = '', currentDay = 'Пн';
 function renderSchedule() {
   const day = SCHEDULE[currentClass]?.[currentDay] || [];
-  scheduleBody.innerHTML = day.length
+  $('#scheduleBody').innerHTML = day.length
     ? day.map((s, i) => `<tr><td>${i + 1}</td><td>${LESSON_TIMES[i] || '—'}</td><td>${s}</td></tr>`).join('')
     : '<tr><td colspan="3" class="schedule-empty">Уроков нет</td></tr>';
 }
-classSelect.addEventListener('change', e => { currentClass = e.target.value; renderSchedule(); });
-dayTabs.addEventListener('click', e => {
-  const tab = e.target.closest('.day-tab');
-  if (!tab) return;
-  $$('.day-tab').forEach(t => t.classList.remove('active'));
-  tab.classList.add('active');
-  currentDay = tab.dataset.day;
+function initSchedule(classes) {
+  const sel = $('#classSelect');
+  sel.innerHTML = '';
+  SCHEDULE = {};
+  classes.forEach(c => {
+    const d = {};
+    c.days.forEach(x => d[x.day] = x.lessons);
+    SCHEDULE[c.name] = d;
+    const o = document.createElement('option');
+    o.value = c.name; o.textContent = c.name;
+    sel.appendChild(o);
+  });
+  if (classes.length) { currentClass = classes[0].name; sel.value = currentClass; }
+  sel.onchange = e => { currentClass = e.target.value; renderSchedule(); };
+  $('#dayTabs').onclick = e => {
+    const tab = e.target.closest('.day-tab');
+    if (!tab) return;
+    $$('.day-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentDay = tab.dataset.day;
+    renderSchedule();
+  };
   renderSchedule();
-});
-renderSchedule();
+}
 
-const galleryGrid = $('#galleryGrid');
-galleryGrid.innerHTML = GALLERY.map((it, i) => `
-  <div class="gallery-item ${it.cls}" data-index="${i}" tabindex="0">
-    <span class="gallery-zoom">🔍</span>
-    <span class="gallery-label">${it.label}</span>
-  </div>
-`).join('');
+let GALLERY = [];
+function renderGallery(list) {
+  GALLERY = list;
+  $('#galleryGrid').innerHTML = list.map((it, i) => `
+    <div class="gallery-item ${it.cls}" data-index="${i}" tabindex="0">
+      <span class="gallery-zoom">🔍</span>
+      <span class="gallery-label">${it.label}</span>
+    </div>
+  `).join('');
+}
 
+function renderDocs(list) {
+  const grid = $('#docsGrid');
+  grid.innerHTML = list.map(d => `
+    <a href="${d.url || '#'}" class="card doc-card reveal" data-doc="${d.title}">
+      <span class="doc-icon">${d.icon || '📄'}</span>
+      <span class="doc-info"><h4>${d.title}</h4><span>${d.meta}</span></span>
+      <span class="doc-arrow">↓</span>
+    </a>
+  `).join('');
+  grid.onclick = e => {
+    const c = e.target.closest('.doc-card');
+    if (!c) return;
+    if ((c.getAttribute('href') || '#') === '#') { e.preventDefault(); showToast('📄 Демо-файл', 'info'); }
+  };
+}
+
+/* ---------- Лайтбокс ---------- */
 const lightbox = $('#lightbox'), lbImage = $('#lbImage'), lbCaption = $('#lbCaption');
 let currentPhoto = 0;
 function openLightbox(i) {
+  if (!GALLERY.length) return;
   currentPhoto = (i + GALLERY.length) % GALLERY.length;
   const it = GALLERY[currentPhoto];
   lbImage.className = `lb-image ${it.cls}`;
@@ -225,7 +235,10 @@ function openLightbox(i) {
   document.body.classList.add('no-scroll');
 }
 function closeLightbox() { lightbox.classList.remove('open'); document.body.classList.remove('no-scroll'); }
-galleryGrid.addEventListener('click', e => { const i = e.target.closest('.gallery-item'); if (i) openLightbox(+i.dataset.index); });
+$('#galleryGrid').onclick = e => {
+  const i = e.target.closest('.gallery-item');
+  if (i) openLightbox(+i.dataset.index);
+};
 $('#lbClose').addEventListener('click', closeLightbox);
 $('#lbPrev').addEventListener('click', () => openLightbox(currentPhoto - 1));
 $('#lbNext').addEventListener('click', () => openLightbox(currentPhoto + 1));
@@ -237,24 +250,12 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') openLightbox(currentPhoto + 1);
 });
 
-const docsGrid = $('#docsGrid');
-docsGrid.innerHTML = DOCUMENTS.map(d => `
-  <a href="${d.url || '#'}" class="card doc-card reveal" data-doc="${d.title}">
-    <span class="doc-icon">${d.icon || '📄'}</span>
-    <span class="doc-info"><h4>${d.title}</h4><span>${d.meta}</span></span>
-    <span class="doc-arrow">↓</span>
-  </a>
-`).join('');
-docsGrid.addEventListener('click', e => {
-  const c = e.target.closest('.doc-card');
-  if (!c) return;
-  if ((c.getAttribute('href') || '#') === '#') { e.preventDefault(); showToast('📄 Демо-файл', 'info'); }
-});
-
+/* ---------- Календарь ---------- */
 const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 const today = new Date();
 let viewY = today.getFullYear(), viewM = today.getMonth();
 let selectedDate = `${viewY}-${String(viewM + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+let EVENTS = [];
 function iso(y, m, d) { return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`; }
 
 function renderCalendar() {
@@ -298,9 +299,8 @@ function renderEvents() {
 }
 $('#prevMonth').onclick = () => { viewM--; if (viewM < 0) { viewM = 11; viewY--; } renderCalendar(); };
 $('#nextMonth').onclick = () => { viewM++; if (viewM > 11) { viewM = 0; viewY++; } renderCalendar(); };
-renderCalendar();
-renderEvents();
 
+/* ---------- Форма ---------- */
 const contactForm = $('#contactForm');
 function setErr(id, msg) {
   const f = document.getElementById(id).closest('.field');
@@ -320,5 +320,25 @@ contactForm.addEventListener('submit', e => {
   contactForm.reset();
 });
 
-observeReveals();
-$('#year').textContent = new Date().getFullYear();
+/* ---------- Запуск ---------- */
+async function init() {
+  const [news, teachers, classes, events, gallery, documents] = await Promise.all([
+    loadJSON('data/news.json'),
+    loadJSON('data/teachers.json'),
+    loadJSON('data/schedule.json'),
+    loadJSON('data/events.json'),
+    loadJSON('data/gallery.json'),
+    loadJSON('data/documents.json')
+  ]);
+  renderNews(news);
+  renderTeachers(teachers);
+  initSchedule(classes);
+  renderGallery(gallery);
+  renderDocs(documents);
+  EVENTS = events;
+  renderCalendar();
+  renderEvents();
+  observeReveals();
+  $('#year').textContent = new Date().getFullYear();
+}
+init();
