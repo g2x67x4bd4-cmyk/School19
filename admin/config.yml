@@ -1,0 +1,129 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+locale: ru
+
+collections:
+
+  - name: "news"
+    label: "📰 Новости"
+    files:
+      - name: "news"
+        label: "Все новости"
+        file: "data/news.json"
+        fields:
+          - label: "Новости"
+            name: "items"
+            widget: "list"
+            label_singular: "Новость"
+            fields:
+              - { label: "Дата", name: "date", widget: "string" }
+              - { label: "Заголовок", name: "title", widget: "string" }
+              - { label: "Текст", name: "text", widget: "text" }
+              - label: "Категория"
+                name: "category"
+                widget: "select"
+                options:
+                  - { label: "Учёба", value: "study" }
+                  - { label: "Спорт", value: "sport" }
+                  - { label: "Мероприятие", value: "event" }
+                  - { label: "Объявление", value: "notice" }
+              - { label: "Фото (класс)", name: "image", widget: "string", default: "ph-1" }
+
+  - name: "teachers"
+    label: "👨‍🏫 Учителя"
+    files:
+      - name: "teachers"
+        label: "Все учителя"
+        file: "data/teachers.json"
+        fields:
+          - label: "Учителя"
+            name: "items"
+            widget: "list"
+            label_singular: "Учитель"
+            fields:
+              - { label: "ФИО", name: "name", widget: "string" }
+              - { label: "Должность", name: "role", widget: "string" }
+              - { label: "Категория и стаж", name: "meta", widget: "string" }
+
+  - name: "schedule"
+    label: "📅 Расписание"
+    files:
+      - name: "schedule"
+        label: "Расписание по классам"
+        file: "data/schedule.json"
+        fields:
+          - label: "Классы"
+            name: "classes"
+            widget: "list"
+            label_singular: "Класс"
+            fields:
+              - { label: "Класс", name: "name", widget: "string" }
+              - label: "Дни"
+                name: "days"
+                widget: "list"
+                label_singular: "День"
+                fields:
+                  - label: "День"
+                    name: "day"
+                    widget: "select"
+                    options: ["Пн", "Вт", "Ср", "Чт", "Пт"]
+                  - label: "Уроки"
+                    name: "lessons"
+                    widget: "list"
+                    label_singular: "Урок"
+                    field: { label: "Предмет", name: "subject", widget: "string" }
+
+  - name: "events"
+    label: "🎉 Мероприятия"
+    files:
+      - name: "events"
+        label: "Все мероприятия"
+        file: "data/events.json"
+        fields:
+          - label: "Мероприятия"
+            name: "items"
+            widget: "list"
+            label_singular: "Мероприятие"
+            fields:
+              - { label: "Дата", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+              - { label: "Время", name: "time", widget: "string" }
+              - { label: "Название", name: "title", widget: "string" }
+              - { label: "Описание", name: "desc", widget: "text" }
+              - { label: "Место", name: "place", widget: "string" }
+
+  - name: "gallery"
+    label: "🖼️ Галерея"
+    files:
+      - name: "gallery"
+        label: "Все фото"
+        file: "data/gallery.json"
+        fields:
+          - label: "Фото"
+            name: "items"
+            widget: "list"
+            label_singular: "Фото"
+            fields:
+              - { label: "Подпись", name: "label", widget: "string" }
+              - { label: "Класс", name: "cls", widget: "string", default: "ph-1" }
+
+  - name: "documents"
+    label: "📄 Документы"
+    files:
+      - name: "documents"
+        label: "Все документы"
+        file: "data/documents.json"
+        fields:
+          - label: "Документы"
+            name: "items"
+            widget: "list"
+            label_singular: "Документ"
+            fields:
+              - { label: "Название", name: "title", widget: "string" }
+              - { label: "Размер", name: "meta", widget: "string" }
+              - { label: "Иконка", name: "icon", widget: "string", default: "📄" }
+              - { label: "Ссылка", name: "url", widget: "string", default: "#" }
