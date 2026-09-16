@@ -12,7 +12,7 @@
 <div class="notice-bar" id="noticeBar">
   <div class="container notice-inner">
     <span class="notice-icon">📢</span>
-    <p class="notice-text"><strong>Объявление:</strong> ОБЪЯВЛЕНИЕ:_____</p>
+    <p class="notice-text"><strong>Объявление:</strong> <span id="siteNotice">…</span></p>
     <button class="notice-close" id="noticeClose">×</button>
   </div>
 </div>
@@ -61,19 +61,14 @@
 
 <section id="home" class="hero">
   <div class="container hero-content">
-    <span class="hero-badge">📍 АДРЕС:_____</span>
+    <span class="hero-badge">📍 <span id="siteBadge">г. Жанаозен</span></span>
     <h1 class="hero-title">Общеобразовательная школа <span class="accent">№19</span></h1>
-    <p class="hero-sub">ТЕКСТ О ШКОЛЕ:_____</p>
+    <p class="hero-sub" id="siteHeroSub">…</p>
     <div class="hero-actions">
       <a href="#about" class="btn btn-primary">Узнать о школе</a>
       <a href="#contacts" class="btn btn-outline">Связаться</a>
     </div>
-    <div class="hero-stats">
-      <div class="stat-card"><strong data-count="0">0</strong><span>учеников</span></div>
-      <div class="stat-card"><strong data-count="0">0</strong><span>педагогов</span></div>
-      <div class="stat-card"><strong data-count="0">0</strong><span>кабинетов</span></div>
-      <div class="stat-card"><strong data-count="0">0</strong><span>лет истории</span></div>
-    </div>
+    <div class="hero-stats" id="siteStats"></div>
   </div>
 </section>
 
@@ -82,20 +77,9 @@
     <div class="section-head reveal">
       <span class="section-tag">О школе</span>
       <h2 class="section-title">Наша школа сегодня</h2>
-      <p class="section-desc">ОПИСАНИЕ ШКОЛЫ:_____</p>
     </div>
-    <div class="about-grid">
-      <article class="card about-card reveal"><div class="card-icon">🎯</div><h3>Миссия</h3><p>ТЕКСТ:_____</p></article>
-      <article class="card about-card reveal"><div class="card-icon">📚</div><h3>Обучение</h3><p>ТЕКСТ:_____</p></article>
-      <article class="card about-card reveal"><div class="card-icon">🏆</div><h3>Достижения</h3><p>ТЕКСТ:_____</p></article>
-      <article class="card about-card reveal"><div class="card-icon">🤝</div><h3>Сообщество</h3><p>ТЕКСТ:_____</p></article>
-    </div>
-    <div class="about-info reveal">
-      <div class="info-row"><span class="info-label">Год основания</span><span class="info-value">ГОД:_____</span></div>
-      <div class="info-row"><span class="info-label">Языки обучения</span><span class="info-value">ЯЗЫКИ:_____</span></div>
-      <div class="info-row"><span class="info-label">Сменность</span><span class="info-value">СМЕНЫ:_____</span></div>
-      <div class="info-row"><span class="info-label">Форма собственности</span><span class="info-value">ФОРМА:_____</span></div>
-    </div>
+    <div class="about-grid" id="siteAboutCards"></div>
+    <div class="about-info reveal" id="siteAboutInfo"></div>
   </div>
 </section>
 
@@ -158,9 +142,9 @@
       <h2 class="section-title">Достижения учеников</h2>
     </div>
     <div class="achieve-grid">
-      <article class="card achieve-card reveal"><div class="achieve-medal gold">🥇</div><h3>НАЗВАНИЕ:_____</h3><p class="achieve-meta">ГОД · ГОРОД</p><p>ОПИСАНИЕ:_____</p></article>
-      <article class="card achieve-card reveal"><div class="achieve-medal silver">🥈</div><h3>НАЗВАНИЕ:_____</h3><p class="achieve-meta">ГОД · ГОРОД</p><p>ОПИСАНИЕ:_____</p></article>
-      <article class="card achieve-card reveal"><div class="achieve-medal bronze">🥉</div><h3>НАЗВАНИЕ:_____</h3><p class="achieve-meta">ГОД · ГОРОД</p><p>ОПИСАНИЕ:_____</p></article>
+      <article class="card achieve-card reveal"><div class="achieve-medal gold">🥇</div><h3>Республиканская олимпиада по математике</h3><p class="achieve-meta">2025 · г. Астана</p><p>1 место в республиканском этапе.</p></article>
+      <article class="card achieve-card reveal"><div class="achieve-medal silver">🥈</div><h3>Областная олимпиада по физике</h3><p class="achieve-meta">2025 · г. Актау</p><p>2 место в командном зачёте.</p></article>
+      <article class="card achieve-card reveal"><div class="achieve-medal gold">🥇</div><h3>Городской турнир по футболу</h3><p class="achieve-meta">2025 · г. Жанаозен</p><p>Победа в городском турнире.</p></article>
     </div>
   </div>
 </section>
@@ -217,10 +201,10 @@
     </div>
     <div class="contacts-layout">
       <div class="contact-info reveal">
-        <div class="card contact-card"><div class="contact-icon">📍</div><div><h4>Адрес</h4><p>АДРЕС:_____</p></div></div>
-        <div class="card contact-card"><div class="contact-icon">📞</div><div><h4>Телефон</h4><p><a href="tel:">ТЕЛЕФОН:_____</a></p></div></div>
-        <div class="card contact-card"><div class="contact-icon">✉️</div><div><h4>E-mail</h4><p><a href="mailto:">EMAIL:_____</a></p></div></div>
-        <div class="card contact-card"><div class="contact-icon">🕐</div><div><h4>Режим работы</h4><p>РЕЖИМ:_____</p></div></div>
+        <div class="card contact-card"><div class="contact-icon">📍</div><div><h4>Адрес</h4><p id="siteAddress">…</p></div></div>
+        <div class="card contact-card"><div class="contact-icon">📞</div><div><h4>Телефон</h4><p><a id="sitePhoneLink" href="#"><span id="sitePhone">…</span></a></p></div></div>
+        <div class="card contact-card"><div class="contact-icon">✉️</div><div><h4>E-mail</h4><p><a id="siteEmailLink" href="#"><span id="siteEmail">…</span></a></p></div></div>
+        <div class="card contact-card"><div class="contact-icon">🕐</div><div><h4>Режим работы</h4><p id="siteHours">…</p></div></div>
       </div>
       <form class="card contact-form reveal" id="contactForm" novalidate>
         <h3>Форма обратной связи</h3>
@@ -240,11 +224,11 @@
   <div class="container footer-inner">
     <div class="footer-col">
       <div class="logo logo-footer"><span class="logo-mark">19</span><span class="logo-text"><span class="logo-title">Школа №19</span><span class="logo-sub">г. Жанаозен</span></span></div>
-      <p class="footer-desc">ОПИСАНИЕ:_____</p>
+      <p class="footer-desc" id="siteFooterDesc">…</p>
     </div>
     <div class="footer-col"><h4>Разделы</h4><ul class="footer-links"><li><a href="#about">О школе</a></li><li><a href="#news">Новости</a></li><li><a href="#schedule">Расписание</a></li><li><a href="#teachers">Учителя</a></li><li><a href="#gallery">Галерея</a></li></ul></div>
     <div class="footer-col"><h4>Полезное</h4><ul class="footer-links"><li><a href="#documents">Документы</a></li><li><a href="#events">Мероприятия</a></li><li><a href="#achievements">Достижения</a></li><li><a href="#contacts">Контакты</a></li></ul></div>
-    <div class="footer-col"><h4>Контакты</h4><ul class="footer-contacts"><li>📍 АДРЕС:_____</li><li>📞 <a href="tel:">ТЕЛЕФОН:_____</a></li><li>✉️ <a href="mailto:">EMAIL:_____</a></li></ul></div>
+    <div class="footer-col"><h4>Контакты</h4><ul class="footer-contacts"><li>📍 <span id="siteFooterAddress">…</span></li><li>📞 <a id="siteFooterPhoneLink" href="#"><span id="siteFooterPhone">…</span></a></li><li>✉️ <a id="siteFooterEmailLink" href="#"><span id="siteFooterEmail">…</span></a></li></ul></div>
   </div>
   <div class="footer-bottom"><div class="container"><p>© <span id="year"></span> Школа №19, г. Жанаозен</p></div></div>
 </footer>
